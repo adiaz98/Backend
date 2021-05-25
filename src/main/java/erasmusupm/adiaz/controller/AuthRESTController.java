@@ -14,9 +14,11 @@ import erasmusupm.adiaz.message.request.LoginForm;
 import erasmusupm.adiaz.message.request.SignUpForm;
 import erasmusupm.adiaz.message.response.JwtResponse;
 import erasmusupm.adiaz.message.response.ResponseMessage;
+import erasmusupm.adiaz.model.Patient;
 import erasmusupm.adiaz.model.Role;
 import erasmusupm.adiaz.model.RoleName;
 import erasmusupm.adiaz.model.User;
+import erasmusupm.adiaz.repository.PatientRepository;
 import erasmusupm.adiaz.repository.RoleRepository;
 import erasmusupm.adiaz.repository.UserRepository;
 import erasmusupm.adiaz.security.jwt.JwtProvider;
@@ -37,6 +39,9 @@ public class AuthRESTController {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    PatientRepository patientRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -80,6 +85,13 @@ public class AuthRESTController {
                     Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
                             .orElseThrow(() -> new RuntimeException("Fail -> Cause: User Role not found."));
                     roles.add(userRole);
+                    Patient patient = new Patient();
+                    patient.setFirstname(signUpRequest.getFirstname());
+                    patient.setLastname(signUpRequest.getLastname());
+                    patient.setEmail(signUpRequest.getEmail());
+                    patient.setTelephone(signUpRequest.getTelephone());
+                    user.setPatient(patient);
+                    patientRepository.save(patient);
             }
         });
 
