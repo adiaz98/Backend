@@ -5,9 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import erasmusupm.adiaz.model.Patient;
+import erasmusupm.adiaz.model.User;
 import erasmusupm.adiaz.repository.PatientRepository;
+import erasmusupm.adiaz.repository.UserRepository;
+
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -15,10 +19,12 @@ import java.util.Map;
 public class PatientRESTController {
 
     private PatientRepository patientRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public PatientRESTController(PatientRepository patientRepository) {
+    public PatientRESTController(PatientRepository patientRepository, UserRepository userRepository) {
         this.patientRepository = patientRepository;
+        this.userRepository = userRepository;
     }
 
     @RequestMapping(method = RequestMethod.GET/*, produces = "application/xml"*/)
@@ -92,6 +98,19 @@ public class PatientRESTController {
             new ResponseEntity<Patient>(HttpStatus.NOT_FOUND);
         }
         return patient;
+    }
+
+    @RequestMapping(value = "/username:{name}", method = RequestMethod.GET)
+    //@GetMapping("/{id}")
+    public Patient getPatientByUsername (@PathVariable ("name") String name){
+        Optional<User> optUser = userRepository.findByUsername(name);
+        if (!optUser.isPresent()){
+            System.out.println("Patient not found!");
+            new ResponseEntity<Patient>(HttpStatus.NOT_FOUND);
+        }
+
+        User user = optUser.get();
+        return user.getPatient();
     }
 }
 
