@@ -1,6 +1,7 @@
 package erasmusupm.adiaz.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Patient {
@@ -12,6 +13,10 @@ public class Patient {
     private String lastname;
     private String email;
     private String telephone;
+
+
+    @OneToMany (mappedBy = "patient", fetch = FetchType.EAGER)
+    private List<Appointment> appointmentList;
 
     public long getId() {
         return id;
@@ -51,5 +56,13 @@ public class Patient {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public List<Appointment> getAppointmentList() {
+        return appointmentList;
+    }
+
+    public void setAppointmentList(List<Appointment> appointmentList) {
+        this.appointmentList = appointmentList;
     }
 }
