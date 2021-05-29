@@ -1,5 +1,7 @@
 package erasmusupm.adiaz.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -13,10 +15,28 @@ public class Patient {
     private String lastname;
     private String email;
     private String telephone;
-
-
+    private String gender;
     @OneToMany (mappedBy = "patient", fetch = FetchType.EAGER)
     private List<Appointment> appointmentList;
+    @JsonIgnore
+    @OneToOne(mappedBy = "patient")
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public long getId() {
         return id;

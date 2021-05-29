@@ -48,8 +48,8 @@ public class PatientRESTController {
             System.out.println("Patient not found!");
             return new ResponseEntity<Patient>(HttpStatus.NOT_FOUND);
         }
-
-        patientRepository.deleteById(id);
+        User user = patient.getUser();
+        userRepository.delete(user);
         return new ResponseEntity<Patient>(HttpStatus.NO_CONTENT);
     }
 

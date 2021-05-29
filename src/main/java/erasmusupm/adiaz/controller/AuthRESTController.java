@@ -90,6 +90,7 @@ public class AuthRESTController {
                     patient.setLastname(signUpRequest.getLastname());
                     patient.setEmail(signUpRequest.getEmail());
                     patient.setTelephone(signUpRequest.getTelephone());
+                    patient.setGender(signUpRequest.getGender());
                     user.setPatient(patient);
                     patientRepository.save(patient);
             }
